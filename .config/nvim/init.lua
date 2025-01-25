@@ -10,6 +10,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require 'config.options'
 require 'config.keymaps'
+require 'config.menu'
 require('lazy').setup('plugins', {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
