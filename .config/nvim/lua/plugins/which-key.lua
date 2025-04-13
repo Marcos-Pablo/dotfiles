@@ -50,5 +50,8 @@ return { -- Useful plugin to show you pending keybinds.
       { '<leader>g', group = 'Git', mode = { 'n', 'v' } },
       { '<leader>t', group = 'Test' },
     },
+    filter = function(mapping)
+      return mapping.desc and mapping.desc ~= ''
+    end,
   },
 }
