@@ -8,6 +8,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+-- Set terminal gui colors to true
+vim.o.termguicolors = true
+
 require 'config.options'
 require 'config.keymaps'
 require 'config.menu'
