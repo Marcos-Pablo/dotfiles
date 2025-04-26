@@ -52,7 +52,7 @@ return {
       -- See Configuration section for options
     },
     keys = {
-      { '<leader>zm', ':CopilotChatModels<CR>', mode = { 'n', 'v' }, desc = 'Select Models' },
+      { '<leader>zm', ':CopilotChatModels<CR>', mode = 'n', desc = 'Select Models' },
       { '<leader>zc', ':CopilotChat<CR>', mode = { 'n', 'v' }, desc = 'Chat with Copilot' },
       { '<leader>ze', ':CopilotChatExplain<CR>', mode = 'v', desc = 'Explain Code' },
       { '<leader>zr', ':CopilotChatReview<CR>', mode = 'v', desc = 'Review Code' },
