@@ -4,6 +4,7 @@ theme = catppuccin-mocha
 # Font
 font-family = MesloLGL Nerd Font Mono
 font-size = 16 
+font-feature = -calt,-liga,-dlig
 
 # Window config
 macos-titlebar-style = hidden

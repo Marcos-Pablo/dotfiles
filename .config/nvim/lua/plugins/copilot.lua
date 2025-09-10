@@ -58,6 +58,7 @@ return {
       { '<leader>zr', ':CopilotChatReview<CR>', mode = 'v', desc = 'Review Code' },
       { '<leader>zf', ':CopilotChatFix<CR>', mode = 'v', desc = 'Fix Code Issues' },
       { '<leader>zt', ':CopilotChatTests<CR>', mode = 'v', desc = 'Generate Tests' },
+      { '<leader>zg', ':CopilotChatCommit<CR>', mode = 'n', desc = 'Generate Commit Message' },
     },
     -- See Commands section for default commands if you want to lazy load on them
   },

@@ -73,9 +73,8 @@ eval "$(starship init zsh)"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git asdf zsh-autosuggestions)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $ZSH/oh-my-zsh.sh
  
 # ----- Bat (better cat) -----
@@ -121,10 +120,6 @@ source ~/fzf-git.sh/fzf-git.sh
 # alias ls="eza --color=always --long --no-git --no-filesize --icons=always --no-time --no-user --no-permissions -la"
 alias ls="eza --color=always --no-git --no-filesize --icons=always --no-time -a"
 alias lsla="eza -la"
-
-# ---- Tmuxifier ----'
-export PATH="$HOME/.tmuxifier/bin:$PATH"
-eval "$(tmuxifier init -)"
 
 # User configuration
 
