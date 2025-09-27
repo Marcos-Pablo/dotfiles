@@ -1,6 +1,6 @@
 return { -- Autoformat
   'stevearc/conform.nvim',
-  event = { 'BufWritePre' },
+  event = { 'BufWritePre', 'BufReadPre', 'BufNewFile' },
   cmd = { 'ConformInfo' },
   keys = {
     {
@@ -30,6 +30,9 @@ return { -- Autoformat
         lsp_format = lsp_format_opt,
       }
     end,
+    formatters = {
+      prettier = { prefer_local = 'node_modules/.bin' },
+    },
     formatters_by_ft = {
       lua = { 'stylua' },
       -- Conform can also run multiple formatters sequentially
@@ -37,6 +40,17 @@ return { -- Autoformat
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      javascript = { 'prettier' },
+      typescript = { 'prettier' },
+      javascriptreact = { 'prettier' },
+      typescriptreact = { 'prettier' },
+      json = { 'prettier' },
+      jsonc = { 'prettier' },
+      markdown = { 'prettier' },
+      yaml = { 'prettier' },
+      html = { 'prettier' },
+      css = { 'prettier' },
+      scss = { 'prettier' },
     },
   },
 }
