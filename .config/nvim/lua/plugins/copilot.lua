@@ -50,6 +50,10 @@ return {
     build = 'make tiktoken', -- Only on MacOS or Linux
     opts = {
       -- See Configuration section for options
+      window = {
+        width = 0.4,
+        height = 0.4,
+      },
     },
     keys = {
       { '<leader>zm', ':CopilotChatModels<CR>', mode = 'n', desc = 'Select Models' },
