@@ -46,3 +46,9 @@ background = #141415
 foreground = #cdcdcd
 selection-background = #252530
 selection-foreground = #cdcdcd
+
+# background image
+background-image = /Users/marcospablo/Documents/outer-wilds-4k.png
+background-opacity = 1.0
+background-image-opacity = 0.2
+background-blur-radius = 10

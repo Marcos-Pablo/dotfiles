@@ -33,6 +33,29 @@ return {
         -- optional configuration here
       }
       vim.cmd 'colorscheme vague'
+      require('fidget').setup {
+        -- LSP progress etc. can stay default
+        notification = {
+          -- how notifications look
+          view = {
+            -- optional: keep as-is
+            -- group_separator_hl = "Comment",
+          },
+          -- the actual floating window
+          window = {
+            normal_hl = 'NormalFloat', -- use your (transparent) float bg
+            border = 'none', -- avoid a boxed look; try "rounded" if you like
+            winblend = 0, -- no extra tint; raise to 10–20 if you want a light fade
+            zindex = 60,
+          },
+        },
+      }
+
+      vim.opt.termguicolors = true
+      vim.cmd 'highlight Normal guibg=NONE ctermbg=NONE'
+      vim.cmd 'highlight NormalNC guibg=NONE ctermbg=NONE'
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
     end,
   },
 }
