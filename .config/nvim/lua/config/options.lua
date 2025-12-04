@@ -2,6 +2,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.o.winborder = 'rounded'
+vim.opt.swapfile = false
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`

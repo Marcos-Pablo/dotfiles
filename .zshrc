@@ -138,7 +138,7 @@ source ~/fzf-git.sh/fzf-git.sh
 # ---- Eza (better ls) -----
 
 # alias ls="eza --color=always --long --no-git --no-filesize --icons=always --no-time --no-user --no-permissions -la"
-alias ls="eza --color=always --no-git --no-filesize --icons=always --no-time -a"
+alias ls="eza --color=always --no-git --icons=always --no-time -a"
 alias lsla="eza -la"
 
 # User configuration
