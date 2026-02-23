@@ -8,6 +8,10 @@ return {
       scope = {
         enabled = false, -- Disable current context highlighting
       },
+      indent = {
+        char = '▎',
+        tab_char = '▎',
+      },
     },
   },
 }

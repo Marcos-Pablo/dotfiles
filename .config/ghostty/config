@@ -2,7 +2,11 @@
 # theme = Catppuccin Mocha
 
 # Font
-font-family = MesloLGL Nerd Font Mono
+# font-family = MesloLGL Nerd Font Mono
+font-family = TX-02
+# font-family = FiraCode Nerd Font Mono
+# font-family = Maple Mono NF
+# font-size = 16 
 font-size = 16 
 font-feature = -calt,-liga,-dlig
 
