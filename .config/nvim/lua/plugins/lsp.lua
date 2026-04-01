@@ -153,6 +153,10 @@ return {
       -- Change diagnostic symbols in the sign column (gutter)
       if vim.g.have_nerd_font then
         vim.diagnostic.config {
+          virtual_text = {
+            spacing = 4,
+            prefix = '●',
+          },
           signs = {
             text = {
               [vim.diagnostic.severity.ERROR] = '',
