@@ -1,38 +1,46 @@
-return { -- Highlight, edit, and navigate code
+return { -- Parser manager for Neovim's built-in treesitter
   'nvim-treesitter/nvim-treesitter',
+  branch = 'main',
   build = ':TSUpdate',
-  main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-  -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  opts = {
-    ensure_installed = {
-      'bash',
-      'c',
-      'diff',
-      'html',
-      'lua',
-      'luadoc',
-      'markdown',
-      'markdown_inline',
-      'query',
-      'vim',
-      'vimdoc',
-      'astro',
-    },
-    -- Autoinstall languages that are not installed
-    auto_install = true,
-    highlight = {
-      enable = true,
-      -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-      --  If you are experiencing weird indenting issues, add the language to
-      --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-      additional_vim_regex_highlighting = { 'ruby' },
-    },
-    indent = { enable = true, disable = { 'ruby' } },
-  },
-  -- There are additional nvim-treesitter modules that you can use to interact
-  -- with nvim-treesitter. You should go explore a few and see what interests you:
-  --
-  --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-  --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-  --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  config = function()
+    require('nvim-treesitter').setup()
+
+    local ts = require('nvim-treesitter')
+    local ts_config = require('nvim-treesitter.config')
+
+    -- Cache installed and available parsers to avoid filesystem hits on every FileType event
+    local installed = {}
+    local available = {}
+    local function refresh_installed()
+      installed = ts_config.get_installed()
+    end
+    refresh_installed()
+    available = ts.get_available()
+
+    -- Replaces auto_install = true: install missing parsers on demand and start highlighting.
+    -- Skips filetypes with no parser in nvim-treesitter's registry (e.g. harpoon, oil).
+    -- If a parser is mid-install, pcall fails silently and treesitter works on next open.
+    vim.api.nvim_create_autocmd('FileType', {
+      callback = function(args)
+        local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+        if not lang then return end
+        if not vim.tbl_contains(available, lang) then return end
+
+        if not vim.tbl_contains(installed, lang) then
+          ts.install({ lang })
+          refresh_installed()
+        end
+
+        pcall(vim.treesitter.start, args.buf)
+      end,
+    })
+
+    -- Pre-install common parsers at startup
+    require('nvim-treesitter').install({
+      'astro', 'bash', 'c', 'cpp', 'diff', 'dockerfile',
+      'git_config', 'gitignore', 'go', 'html', 'javascript',
+      'json', 'lua', 'luadoc', 'make', 'markdown', 'markdown_inline',
+      'query', 'typescript', 'vim', 'vimdoc', 'yaml',
+    })
+  end,
 }

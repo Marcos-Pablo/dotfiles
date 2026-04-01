@@ -43,7 +43,8 @@ return { -- Autocompletion
     cmp.setup {
       window = {
         completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
+        -- documentation = cmp.config.window.bordered(),
+        documentation = nil,
       },
       snippet = {
         expand = function(args)
