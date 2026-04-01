@@ -56,6 +56,11 @@ return {
       vim.cmd 'highlight NormalNC guibg=NONE ctermbg=NONE'
       vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
+
+      -- Give popup menus a visible background (separate from NormalFloat).
+      -- Uses a slightly lighter shade of the vague theme bg (#1c1c24).
+      vim.api.nvim_set_hl(0, 'Pmenu',    { bg = '#252535' })
+      vim.api.nvim_set_hl(0, 'PmenuSel', { bg = '#3a3a52', bold = true })
     end,
   },
 }
