@@ -42,7 +42,6 @@ return { -- Useful plugin to show you pending keybinds.
     -- Document existing key chains
     spec = {
       { '<leader>c', group = 'Code', mode = { 'n', 'x' } },
-      { '<leader>d', group = '[D]ocument' },
       { '<leader>r', group = '[R]ename' },
       { '<leader>s', group = 'Search' },
       { '<leader>w', group = '[W]orkspace' },
@@ -50,6 +49,7 @@ return { -- Useful plugin to show you pending keybinds.
       { '<leader>g', group = 'Git', mode = { 'n', 'v' } },
       { '<leader>t', group = 'Test' },
       { '<leader>z', group = 'Copilot', mode = { 'n', 'v' } },
+      { '<leader>x', group = 'Diagnostics', mode = { 'n', 'v' } },
     },
     filter = function(mapping)
       return mapping.desc and mapping.desc ~= ''

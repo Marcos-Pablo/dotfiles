@@ -84,15 +84,6 @@ return {
           --  Useful when your language has ways of declaring types without an actual implementation.
           map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
-          -- Jump to the type of the word under your cursor.
-          --  Useful when you're not sure what type a variable is and you want to see
-          --  the definition of its *type*, not where it was *defined*.
-          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-
-          -- Fuzzy find all the symbols in your current document.
-          --  Symbols are things like variables, functions, types, etc.
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
           map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
@@ -104,6 +95,10 @@ return {
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+
+          -- Fuzzy find all the symbols in your current document.
+          --  Symbols are things like variables, functions, types, etc.
+          map('<leader>cs', require('telescope.builtin').lsp_document_symbols, '[C]ode [S]ymbols', { 'n', 'x' })
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
@@ -153,10 +148,6 @@ return {
       -- Change diagnostic symbols in the sign column (gutter)
       if vim.g.have_nerd_font then
         vim.diagnostic.config {
-          virtual_text = {
-            spacing = 4,
-            prefix = '●',
-          },
           signs = {
             text = {
               [vim.diagnostic.severity.ERROR] = '',
@@ -175,11 +166,7 @@ return {
       -- Broadcast cmp capabilities to all servers globally.
       -- In Neovim 0.11+, vim.lsp.config('*', ...) applies to every server.
       vim.lsp.config('*', {
-        capabilities = vim.tbl_deep_extend(
-          'force',
-          vim.lsp.protocol.make_client_capabilities(),
-          require('cmp_nvim_lsp').default_capabilities()
-        ),
+        capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), require('cmp_nvim_lsp').default_capabilities()),
       })
 
       -- LSP servers to install and configure.
