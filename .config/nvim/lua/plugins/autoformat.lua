@@ -50,7 +50,8 @@ return { -- Autoformat
       jsonc = { 'prettier' },
       markdown = { 'prettier' },
       yaml = { 'prettier' },
-      html = { 'prettier' },
+      -- html = { 'prettier' }, -- disabled: mangles Go template syntax
+      templ = { 'templ_fmt' },
       css = { 'prettier' },
       scss = { 'prettier' },
     },

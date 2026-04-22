@@ -117,12 +117,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- Go-specific settings
+-- Go / templ use hard tabs by convention (gofmt, templ fmt)
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'go',
+  pattern = { 'go', 'templ' },
   callback = function()
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
     vim.opt_local.expandtab = false
   end,
 })
+
+vim.filetype.add({ extension = { templ = 'templ' } })

@@ -189,6 +189,19 @@ return {
         astro = {
           filetypes = { 'astro' },
         },
+        html = {
+          filetypes = { 'html', 'templ' },
+        },
+        templ = {},
+        tailwindcss = {
+          filetypes = {
+            'html', 'templ', 'astro', 'css', 'scss',
+            'javascript', 'javascriptreact', 'typescript', 'typescriptreact',
+          },
+        },
+        emmet_language_server = {
+          filetypes = { 'html', 'templ', 'astro', 'css', 'scss' },
+        },
       }
 
       -- Apply server-specific settings.

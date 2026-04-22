@@ -40,7 +40,7 @@ return { -- Parser manager for Neovim's built-in treesitter
       'astro', 'bash', 'c', 'cpp', 'diff', 'dockerfile',
       'git_config', 'gitignore', 'go', 'html', 'javascript',
       'json', 'lua', 'luadoc', 'make', 'markdown', 'markdown_inline',
-      'query', 'typescript', 'vim', 'vimdoc', 'yaml',
+      'query', 'templ', 'typescript', 'vim', 'vimdoc', 'yaml',
     })
   end,
 }
