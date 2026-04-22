@@ -16,6 +16,7 @@ return {
     quickfile = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
+    -- image = { enabled = true },
     lazygit = { enabled = true },
     dashboard = {
       sections = {
