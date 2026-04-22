@@ -7,11 +7,16 @@ return {
     'nvim-treesitter/nvim-treesitter',
     -- Go adapter
     'fredrikaverpil/neotest-golang',
+    -- Jest adapter
+    'nvim-neotest/neotest-jest',
   },
   config = function()
     require('neotest').setup({
       adapters = {
         require('neotest-golang')(),
+        require('neotest-jest')({
+          jestCommand = 'npx jest',
+        }),
       },
     })
 
