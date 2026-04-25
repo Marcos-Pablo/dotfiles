@@ -1,5 +1,6 @@
 return {
   'nickjvandyke/opencode.nvim',
+  enabled = false, -- disabled during Claude plugin evaluation
   version = '*', -- Latest stable release
   dependencies = {
     {
