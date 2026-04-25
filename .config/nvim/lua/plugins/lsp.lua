@@ -202,6 +202,7 @@ return {
         emmet_language_server = {
           filetypes = { 'html', 'templ', 'astro', 'css', 'scss' },
         },
+        sqls = {},
       }
 
       -- Apply server-specific settings.
@@ -214,7 +215,7 @@ return {
       require('mason').setup()
 
       local ensure_installed = vim.tbl_keys(servers)
-      vim.list_extend(ensure_installed, { 'stylua' })
+      vim.list_extend(ensure_installed, { 'stylua', 'sql-formatter' })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       -- mason-lspconfig installs servers; enable each one after installation.

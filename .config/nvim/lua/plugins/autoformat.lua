@@ -33,6 +33,7 @@ return { -- Autoformat
     end,
     formatters = {
       prettier = { prefer_local = 'node_modules/.bin' },
+      sql_formatter = { prepend_args = { '--language', 'postgresql' } },
     },
     formatters_by_ft = {
       lua = { 'stylua' },
@@ -54,6 +55,7 @@ return { -- Autoformat
       templ = { 'templ' },
       css = { 'prettier' },
       scss = { 'prettier' },
+      sql = { 'sql_formatter' },
     },
   },
 }
