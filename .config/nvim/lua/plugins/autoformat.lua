@@ -51,7 +51,7 @@ return { -- Autoformat
       markdown = { 'prettier' },
       yaml = { 'prettier' },
       -- html = { 'prettier' }, -- disabled: mangles Go template syntax
-      templ = { 'templ_fmt' },
+      templ = { 'templ' },
       css = { 'prettier' },
       scss = { 'prettier' },
     },
