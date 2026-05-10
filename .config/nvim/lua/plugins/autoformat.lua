@@ -56,6 +56,7 @@ return { -- Autoformat
       css = { 'prettier' },
       scss = { 'prettier' },
       sql = { 'sql_formatter' },
+      rust = { 'rustfmt' },
     },
   },
 }
