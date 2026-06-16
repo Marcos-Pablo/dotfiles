@@ -38,9 +38,10 @@ return { -- Parser manager for Neovim's built-in treesitter
     -- Pre-install common parsers at startup
     require('nvim-treesitter').install({
       'astro', 'bash', 'c', 'cpp', 'diff', 'dockerfile',
-      'git_config', 'gitignore', 'go', 'html', 'javascript',
-      'json', 'lua', 'luadoc', 'make', 'markdown', 'markdown_inline',
-      'query', 'rust', 'templ', 'typescript', 'vim', 'vimdoc', 'yaml',
+      'eex', 'elixir', 'git_config', 'gitignore', 'go', 'heex',
+      'html', 'javascript', 'json', 'lua', 'luadoc', 'make',
+      'markdown', 'markdown_inline', 'query', 'rust', 'templ',
+      'typescript', 'vim', 'vimdoc', 'yaml',
     })
   end,
 }
