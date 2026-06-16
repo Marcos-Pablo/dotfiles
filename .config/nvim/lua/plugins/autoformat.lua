@@ -57,6 +57,8 @@ return { -- Autoformat
       scss = { 'prettier' },
       sql = { 'sql_formatter' },
       rust = { 'rustfmt' },
+      elixir = { 'mix_format' },
+      heex = { 'mix_format' },
     },
   },
 }
