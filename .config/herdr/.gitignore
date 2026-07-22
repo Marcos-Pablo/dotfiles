@@ -1,0 +1,4 @@
+# herdr runtime state — keep only config.toml under version control.
+*.log
+session.json
+release-notes.json

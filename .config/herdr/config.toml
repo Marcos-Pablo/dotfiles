@@ -1,3 +1,4 @@
+onboarding = false
 # herdr configuration
 # Place this file at ~/.config/herdr/config.toml
 
@@ -25,6 +26,8 @@
 # red = "#ff6188"
 # green = "#a6e3a1"
 
+name = "terminal"
+auto_switch = false
 [terminal]
 # Executable used for new interactive panes.
 # Empty means $SHELL, then /bin/sh.
@@ -51,6 +54,31 @@
 # manifest_check = true
 
 [keys]
+# --- Seamless ctrl+hjkl nav (vim-tmux-navigator parity, issue #281) ---
+# herdr has no native vim passthrough, so ctrl+hjkl is bound to the herdr-nav
+# script: if the focused pane runs (n)vim it forwards the key so nvim moves its
+# own split (handing focus back to herdr at edge splits); otherwise it moves the
+# herdr pane. The built-in prefix+hjkl focus_pane defaults stay as a fallback.
+[[keys.command]]
+key = "ctrl+h"
+type = "shell"
+command = "/Users/marcospablo/dotfiles/bin/herdr-nav left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "shell"
+command = "/Users/marcospablo/dotfiles/bin/herdr-nav down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "shell"
+command = "/Users/marcospablo/dotfiles/bin/herdr-nav up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "shell"
+command = "/Users/marcospablo/dotfiles/bin/herdr-nav right"
+
 # Prefix key to enter prefix mode (default: "ctrl+b")
 # Examples: "ctrl+b", "f12", "esc", "-"
 # Action bindings use explicit syntax: "prefix+n" requires the prefix;

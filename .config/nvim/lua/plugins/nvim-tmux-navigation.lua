@@ -1,5 +1,8 @@
 return {
   'christoomey/vim-tmux-navigator',
+  -- Disabled in favour of herdr-nav.lua (seamless ctrl+hjkl for herdr instead of
+  -- tmux). To go back to tmux: set this to `true` and disable herdr-nav.lua.
+  enabled = false,
   event = 'VeryLazy',
   init = function()
     vim.g.tmux_navigator_no_mappings = 1
