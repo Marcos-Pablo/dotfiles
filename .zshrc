@@ -178,3 +178,27 @@ alias git_tree="git log --oneline --decorate --graph --parents"
 # boot.dev
 export PATH="$PATH:$HOME/go/bin/"
 
+# ── Personal shell config ─────────────────────────────────────
+
+# Set TMPDIR to a directory in the home folder to avoid permission issues with some tools
+export TMPDIR="$HOME/.cache/tmp"
+
+export NODE_OPTIONS=--max-old-space-size=8192 # increase node memory limit
+
+# herdr session switcher: detach the current session with prefix+q, then run
+# `hs` to fuzzy-pick and attach to another. (attach must run from a shell, not
+# from inside a herdr pane.)
+hs() {
+  local name
+  name=$(herdr session list --json \
+    | jq -r '.sessions[] | "\(.name)\t\(.running | if . then "running" else "stopped" end)\(if .default then " ·default" else "" end)"' \
+    | fzf --with-nth=1 --delimiter=$'\t' --prompt='herdr ❯ ' --height=40% --reverse) || return
+  herdr session attach "${name%%$'\t'*}"
+}
+
+# ── mise + local overrides — keep last, after all PATH setup ──
+# Node etc. managed by mise (nvm removed).
+eval "$(mise activate zsh)"
+
+# Machine-local & company-private config (untracked; not in the repo).
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
