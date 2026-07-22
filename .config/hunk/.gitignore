@@ -1,0 +1,2 @@
+# hunk runtime state — keep only config.toml under version control.
+state.json

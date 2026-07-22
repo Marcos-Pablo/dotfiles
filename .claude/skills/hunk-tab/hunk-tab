@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+# hunk-tab [--keep] [--no-watch] [-- <hunk args...>]
+#
+# Open — or reuse — a herdr tab reviewing a diff with the hunk TUI viewer.
+# One live session per repo/worktree, addressed by its repo root:
+#   * if a diff tab for THIS repo/worktree is already open, reload it in place;
+#   * otherwise spawn a new tab and launch hunk (auto-refreshing via --watch).
+# Meant to be driven by coding agents (via the `hunk-tab` skill) or by hand.
+#
+#   hunk-tab                 # working-tree diff (default), auto-refreshing
+#   hunk-tab --staged        # staged changes
+#   hunk-tab main...HEAD     # compare against a branch
+#   hunk-tab show HEAD~1     # review a past commit
+#   hunk-tab --keep          # don't auto-close the tab when hunk quits
+#   hunk-tab --no-watch      # don't pass --watch to a freshly launched hunk
+#   hunk-tab -- diff -- src/ # forward a pathspec to hunk
+#
+# Tabs are labeled "diff · <repo-or-worktree-name>" so multiple open reviews
+# stay distinguishable (and so this script can find the right one to reload).
+set -euo pipefail
+
+# Callers may be the herdr server, whose PATH is not our interactive shell's.
+export PATH="/opt/homebrew/bin:/usr/bin:/bin:$PATH"
+
+# Resolve binaries explicitly: prefer PATH, fall back to the mise install (herdr,
+# whose `latest` symlink survives `mise up`) and the brew path (hunk).
+HERDR="$(command -v herdr || true)"
+[ -z "$HERDR" ] && HERDR="$HOME/.local/share/mise/installs/herdr/latest/herdr"
+HUNK="$(command -v hunk || true)"
+[ -z "$HUNK" ] && HUNK="/opt/homebrew/bin/hunk"
+
+# The workspace currently in front = the globally focused tab's workspace.
+focused_ws() {
+  "$HERDR" tab list 2>/dev/null \
+    | jq -r '.result.tabs[]? | select(.focused==true) | .workspace_id' | head -1
+}
+
+# Focus a tab ONLY if it already lives in the workspace the user is viewing, so
+# we never yank them across workspaces. A tab_id is "<workspace>:<tab>". Returns
+# 0 if it focused, 1 if it left focus where it was.
+focus_here_only() {
+  local tab_id="$1" tab_ws="${1%%:*}" cur
+  cur="$(focused_ws)"
+  if [ -n "$cur" ] && [ "$tab_ws" = "$cur" ]; then
+    "$HERDR" tab focus "$tab_id" >/dev/null
+    return 0
+  fi
+  return 1
+}
+
+keep=0
+watch=1
+while [ -n "${1:-}" ]; do
+  case "$1" in
+    --keep)     keep=1; shift ;;
+    --no-watch) watch=0; shift ;;
+    --)         shift; break ;;   # explicit end of options
+    *)          break ;;          # first hunk arg
+  esac
+done
+
+# `hunk` needs a subcommand. Default to a working-tree diff; if the first token
+# is a flag (--staged) or a bare target (main...HEAD), treat it as `diff` args.
+[ "$#" -eq 0 ] && set -- diff
+case "$1" in
+  diff | show | stash | patch | difftool | pager) : ;;
+  *) set -- diff "$@" ;;
+esac
+base=("$@") # normalized hunk args, without --watch
+
+# Repo/worktree root (git worktrees each report their own toplevel), else cwd.
+root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+[ -z "$root" ] && root="$(jj root 2>/dev/null || true)"
+[ -z "$root" ] && root="$PWD"
+label="diff · $(basename "$root")"
+
+# Reuse: if a hunk session is already live for this exact root, reload it in
+# place and focus its tab instead of spawning a duplicate.
+live="$("$HUNK" session list --json 2>/dev/null \
+  | jq -r --arg r "$root" '[.sessions[]? | select(.repoRoot==$r)] | length' 2>/dev/null || echo 0)"
+if [ "${live:-0}" -ge 1 ]; then
+  if ! err="$("$HUNK" session reload --repo "$root" -- "${base[@]}" 2>&1 >/dev/null)"; then
+    echo "hunk-tab: could not reload the session for $root: $err" >&2
+    exit 1
+  fi
+  tab_id="$("$HERDR" tab list | jq -r --arg l "$label" \
+    '.result.tabs[] | select(.label==$l) | .tab_id' | head -1)"
+  echo "hunk-tab: reloaded ${tab_id:-existing session} ($label) in $root"
+  if [ -n "$tab_id" ] && ! focus_here_only "$tab_id"; then
+    echo "hunk-tab: (it's in workspace ${tab_id%%:*} — left your focus where it is)"
+  fi
+  exit 0
+fi
+
+# Fresh session: build the launch command. --watch (auto-reload on change) only
+# makes sense for a working-tree diff, and must precede any `-- pathspec`.
+if [ "$watch" -eq 1 ] && [ "${base[0]}" = "diff" ]; then
+  launch=(diff --watch "${base[@]:1}")
+else
+  launch=("${base[@]}")
+fi
+
+# Pin the tab to the CALLING pane's workspace, not whatever workspace happens to
+# be focused when the script runs (an agent may launch this long after — and a
+# workspace away from — where it was asked). herdr sets HERDR_PANE_ID in every
+# pane's env; a subprocess of that pane (this script) inherits it.
+ws=""
+if [ -n "${HERDR_PANE_ID:-}" ]; then
+  ws="$("$HERDR" pane get "$HERDR_PANE_ID" 2>/dev/null \
+    | jq -r '.result.pane.workspace_id // empty')"
+fi
+
+# Spawn the tab unfocused so the shell prompt never flashes before hunk paints.
+if [ -n "$ws" ]; then
+  create="$("$HERDR" tab create --workspace "$ws" --cwd "$root" --label "$label" --no-focus)"
+else
+  create="$("$HERDR" tab create --cwd "$root" --label "$label" --no-focus)"
+fi
+pane_id="$(jq -r '.result.root_pane.pane_id // empty' <<<"$create")"
+tab_id="$(jq -r '.result.tab.tab_id // empty' <<<"$create")"
+if [ -z "$pane_id" ] || [ -z "$tab_id" ]; then
+  echo "hunk-tab: could not create a herdr tab (is a herdr session running?)" >&2
+  echo "$create" >&2
+  exit 1
+fi
+
+# Build the command to run in the new pane's shell, quoting each hunk arg.
+cmd="hunk"
+for a in "${launch[@]}"; do cmd+=" $(printf '%q' "$a")"; done
+# Ephemeral by default: quitting hunk closes the review tab so they don't pile
+# up. `--keep` drops the shell back into the tab instead.
+[ "$keep" -eq 0 ] && cmd+="; herdr tab close $tab_id"
+
+"$HERDR" pane run "$pane_id" "$cmd" >/dev/null
+# Focus only if the user is already viewing this tab's workspace (no cross-ws yank).
+focused=""
+focus_here_only "$tab_id" && focused=1
+
+# hunk takes a moment to boot and register with its session daemon. Block until
+# the session for this repo is queryable so a caller can annotate it right away
+# (see `hunk session comment`). Best-effort: give up after ~5s rather than hang.
+ready=""
+for _ in $(seq 1 25); do
+  if "$HUNK" session list --json 2>/dev/null \
+      | jq -e --arg r "$root" '.sessions[]? | select(.repoRoot==$r)' >/dev/null 2>&1; then
+    ready=1
+    break
+  fi
+  sleep 0.2
+done
+
+echo "hunk-tab: opened $tab_id ($label) in $root"
+[ -z "$focused" ] && echo "hunk-tab: (opened in workspace ${tab_id%%:*} — left your focus where it is)"
+if [ -n "$ready" ]; then
+  echo "hunk-tab: session ready — annotate with: hunk session comment ... --repo $root"
+else
+  echo "hunk-tab: warning — session not visible to the hunk daemon yet" >&2
+fi
