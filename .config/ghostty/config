@@ -3,12 +3,13 @@
 
 # Font
 # font-family = MesloLGL Nerd Font Mono
-font-family = TX-02
+# font-family = TX-02
 # font-family = FiraCode Nerd Font Mono
 # font-family = Maple Mono NF
-# font-size = 16 
+font-family = Jetbrains Mono
 font-size = 16 
-font-feature = -calt,-liga,-dlig
+# font-feature = -calt,-liga,-dlig
+font-feature = calt,liga,dlig
 
 # Window config
 macos-titlebar-style = hidden
@@ -17,6 +18,11 @@ window-padding-y = 10,0
 
 # Shell config
 shell-integration = zsh
+
+# Right Option acts as Alt so Option+Backspace deletes a word (and Option+arrows
+# jump by word) in shells/TUIs, including inside herdr panes. Left Option stays a
+# compose key for accented characters (á ã ç é …).
+macos-option-as-alt = right
 
 # Other configs
 # background-opacity = 0.95
@@ -52,7 +58,8 @@ selection-background = #252530
 selection-foreground = #cdcdcd
 
 # background image
-background-image = /Users/marcospablo/Documents/outer-wilds-4k.png
+background-image = /Users/marcospablo/Documents/aura-2.png
+background-image-fit = cover
 background-opacity = 1.0
-background-image-opacity = 0.2
+background-image-opacity = 0.25
 background-blur-radius = 10
