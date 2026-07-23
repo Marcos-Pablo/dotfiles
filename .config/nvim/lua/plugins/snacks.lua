@@ -6,6 +6,7 @@ return {
     { '<leader>gg', function() Snacks.lazygit() end, desc = 'Lazygit' },
     { '<leader>gl', function() Snacks.lazygit.log() end, desc = 'Lazygit log' },
     { '<leader>gf', function() Snacks.lazygit.log_file() end, desc = 'Lazygit file history' },
+    { '<leader>go', function() Snacks.gitbrowse() end, desc = 'Open on remote (browser)', mode = { 'n', 'x' } },
   },
   opts = {
     -- your configuration comes here
