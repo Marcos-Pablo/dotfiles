@@ -63,22 +63,4 @@ return {
       end, { desc = 'Open root directory (mini.files)' })
     end,
   },
-
-  -- neo-tree: fallback file tree view, displayed on the right
-  {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v3.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons',
-      'MunifTanjim/nui.nvim',
-    },
-    config = function()
-      require('neo-tree').setup {
-        window = { position = 'right' },
-      }
-
-      vim.keymap.set('n', '<leader>e', ':Neotree toggle right<CR>', { desc = 'Toggle file tree (neo-tree)' })
-    end,
-  },
 }
